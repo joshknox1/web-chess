@@ -1,6 +1,6 @@
 /**
  * app.js
- * Main orchestrator for the Resilient Noether Chess Game & AI Trainer.
+ * Main orchestrator for Michael's Chess.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
