@@ -1,0 +1,13 @@
+{
+  "name": "web-chess",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static chess trainer app for Cloudflare Pages.",
+  "scripts": {
+    "start": "python3 -m http.server 3000",
+    "deploy": "wrangler pages deploy . --project-name web-chess"
+  },
+  "devDependencies": {
+    "wrangler": "^4.75.0"
+  }
+}
