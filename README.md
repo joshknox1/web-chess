@@ -1,4 +1,4 @@
-# Michael's Chess
+# Chess Trainer
 
 Static chess trainer app built by Antigravity/Gemini.
 

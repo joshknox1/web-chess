@@ -1,6 +1,6 @@
 /**
  * app.js
- * Main orchestrator for Michael's Chess.
+ * Main orchestrator for Chess Trainer.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
