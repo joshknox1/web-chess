@@ -13,18 +13,29 @@ test('page opts into safe-area aware mobile viewport sizing', () => {
   assert.match(css, /env\(safe-area-inset-bottom/);
 });
 
-test('phone layout keeps the chess board first, large, and viewport-bound', () => {
-  assert.match(css, /@media\s*\(max-width:\s*700px\)/);
-  assert.match(css, /--mobile-board-size:\s*min\(calc\(100vw - 28px\), calc\(100dvh - 250px\), 520px\)/);
+test('phone layout keeps the chess board large, centered, and not sticky', () => {
+  assert.match(css, /@media\s*\(max-width:\s*760px\)/);
+  assert.match(css, /--mobile-board-size:\s*min\(calc\(100vw - 24px\), 430px\)/);
+  assert.match(css, /\.chess-board-area\s*{[^}]*position:\s*static/s);
+  assert.match(css, /\.chess-board-area\s*{[^}]*align-items:\s*center/s);
   assert.match(css, /\.board-layout\s*{[^}]*width:\s*var\(--mobile-board-size\)/s);
-  assert.match(css, /\.board-layout\s*{[^}]*height:\s*var\(--mobile-board-size\)/s);
-  assert.match(css, /\.chess-board-area\s*{[^}]*position:\s*sticky/s);
+  assert.match(css, /\.board-layout\s*{[^}]*margin:\s*0 auto/s);
+  assert.match(css, /\.board-wrapper\s*{[^}]*aspect-ratio:\s*1 \/ 1/s);
+  assert.match(css, /\.eval-bar-container,\s*\.top-coords,\s*\.right-coords\s*{[^}]*display:\s*none/s);
+});
+
+test('phone page prevents horizontal overflow and keeps panels scrollable', () => {
+  assert.match(css, /html,\s*body\s*{[^}]*overflow-x:\s*hidden/s);
+  assert.match(css, /\.app-main\s*{[^}]*flex-direction:\s*column/s);
+  assert.match(css, /\.dashboard-area\s*{[^}]*height:\s*auto/s);
+  assert.match(css, /\.tab-pane\s*{[^}]*position:\s*static/s);
 });
 
 test('touch targets and dashboard controls are thumb-friendly on phones', () => {
   assert.match(css, /\.square\s*{[^}]*min-width:\s*0/s);
-  assert.match(css, /\.btn\s*,\s*\.tab-link\s*,\s*\.radio-btn\s*,\s*\.icon-btn\s*{[^}]*min-height:\s*44px/s);
+  assert.match(css, /\.board-actions\s*{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/s);
+  assert.match(css, /\.board-actions \.btn\s*{[^}]*min-height:\s*44px/s);
+  assert.match(css, /\.tab-link\s*{[^}]*min-height:\s*44px/s);
   assert.match(css, /\.dashboard-tabs\s*{[^}]*overflow-x:\s*auto/s);
-  assert.match(css, /\.board-actions\s*{[^}]*display:\s*grid/s);
   assert.match(css, /\.tooltip::before\s*{[^}]*display:\s*none/s);
 });

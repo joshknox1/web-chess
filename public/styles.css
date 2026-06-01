@@ -1314,19 +1314,30 @@ body {
     to { transform: translateY(0); opacity: 1; }
 }
 
-/* Phone-first polish: keep the board playable and controls thumb-friendly. */
-@media (max-width: 700px) {
+/* Phone layout: prioritize a clean chess-first experience over desktop density. */
+@media (max-width: 760px) {
     :root {
         --border-radius-lg: 14px;
-        --mobile-board-size: min(calc(100vw - 28px), calc(100dvh - 250px), 520px);
+        --mobile-board-size: min(calc(100vw - 24px), 430px);
+    }
+
+    html,
+    body {
+        width: 100%;
+        min-height: 100dvh;
+        overflow-x: hidden;
     }
 
     body {
         overflow-y: auto;
+        overscroll-behavior-y: contain;
     }
 
     .app-container {
-        padding: calc(8px + var(--safe-top)) calc(8px + var(--safe-right)) calc(12px + var(--safe-bottom)) calc(8px + var(--safe-left));
+        width: 100%;
+        min-height: 100dvh;
+        height: auto;
+        padding: calc(8px + var(--safe-top)) calc(8px + var(--safe-right)) calc(16px + var(--safe-bottom)) calc(8px + var(--safe-left));
         gap: 10px;
         max-width: none;
     }
@@ -1352,11 +1363,12 @@ body {
     }
 
     .logo-text h1 {
-        font-size: 15px;
+        font-size: 16px;
+        line-height: 1.1;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 58vw;
+        max-width: 62vw;
     }
 
     .logo-text span {
@@ -1365,39 +1377,61 @@ body {
 
     .header-actions {
         gap: 8px;
+        flex-shrink: 0;
     }
 
     .app-main {
+        display: flex;
+        flex-direction: column;
         gap: 10px;
+        min-height: 0;
+        padding-bottom: 0;
     }
 
     .chess-board-area {
-        position: sticky;
-        top: calc(4px + var(--safe-top));
-        z-index: 20;
-        padding: 10px 6px;
+        position: static;
+        padding: 10px 8px 12px;
         gap: 10px;
+        border-radius: 14px;
         justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        overflow: hidden;
     }
 
     .board-layout {
+        display: block;
         width: var(--mobile-board-size);
-        height: var(--mobile-board-size);
-        max-width: var(--mobile-board-size);
-        min-height: 290px;
-        aspect-ratio: 1 / 1;
-        gap: 6px;
+        height: auto;
+        max-width: 100%;
+        aspect-ratio: auto;
+        margin: 0 auto;
     }
 
-    .eval-bar-container {
-        width: 10px;
+    .eval-bar-container,
+    .top-coords,
+    .right-coords {
+        display: none;
+    }
+
+    .board-wrapper {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        flex: none;
+    }
+
+    .board-middle-row {
+        display: grid;
+        grid-template-columns: 14px minmax(0, 1fr);
+        flex: none;
+        height: calc(100% - 14px);
     }
 
     .coordinates-row {
         height: 14px;
         font-size: 9px;
         padding-left: 14px;
-        padding-right: 14px;
+        padding-right: 0;
     }
 
     .coordinates-col {
@@ -1406,17 +1440,22 @@ body {
     }
 
     .chessboard {
-        border-radius: 3px;
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        min-height: 0;
+        border-radius: 6px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
     }
 
     .piece {
-        width: 94%;
-        height: 94%;
+        width: 95%;
+        height: 95%;
     }
 
     .square.legal-move::after {
-        width: 32%;
-        height: 32%;
+        width: 34%;
+        height: 34%;
     }
 
     .square.legal-move.has-piece::after {
@@ -1427,53 +1466,79 @@ body {
 
     .board-status-bar {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "alert alert"
+            "black white";
         gap: 6px;
+        width: 100%;
+        max-width: var(--mobile-board-size);
         padding: 8px;
-        max-width: 100%;
         text-align: center;
     }
 
+    .player-black { grid-area: black; }
+    .player-white { grid-area: white; }
+
     .player-badge {
         justify-content: center;
-        padding: 2px 6px;
+        min-width: 0;
+        padding: 4px 5px;
+        background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    .player-badge .avatar {
+        font-size: 14px;
     }
 
     .player-badge .player-name {
-        font-size: 12px;
+        font-size: 11px;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .game-alerts {
-        order: -1;
+        grid-area: alert;
         max-width: none;
         white-space: normal;
         overflow: visible;
         text-overflow: clip;
         line-height: 1.25;
         font-size: 12px;
+        color: var(--text-primary);
     }
 
     .board-actions {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        max-width: var(--mobile-board-size);
         gap: 8px;
-        max-width: 100%;
     }
 
     .board-actions .btn {
+        min-height: 44px;
         padding: 9px 8px;
         font-size: 12px;
         gap: 5px;
     }
 
+    .board-actions .btn svg {
+        width: 14px;
+        height: 14px;
+    }
+
     .board-actions #new-game-btn {
-        grid-column: span 2;
+        grid-column: 1 / -1;
     }
 
     .dashboard-area {
         height: auto;
-        min-height: 360px;
+        min-height: 0;
         overflow: visible;
+        border-radius: 14px;
     }
 
     .dashboard-tabs {
@@ -1488,20 +1553,21 @@ body {
 
     .tab-link {
         flex: 0 0 auto;
+        min-width: 112px;
+        min-height: 44px;
         padding: 12px 14px;
-        min-width: 118px;
         white-space: nowrap;
     }
 
     .tab-content {
         overflow: visible;
-        min-height: 360px;
+        min-height: 0;
     }
 
     .tab-pane {
         position: static;
         height: auto;
-        min-height: 360px;
+        min-height: 0;
         padding: 14px;
         overflow: visible;
     }
@@ -1517,8 +1583,9 @@ body {
 
     .move-history-container {
         grid-template-columns: 1fr;
-        max-height: 210px;
-        min-height: 120px;
+        max-height: 220px;
+        min-height: 110px;
+        overflow-y: auto;
     }
 
     .empty-state {
@@ -1528,8 +1595,9 @@ body {
 
     .form-control {
         width: 100%;
+        min-height: 44px;
         font-size: 16px;
-        padding: 12px;
+        padding: 10px 12px;
     }
 
     .radio-group {
@@ -1537,12 +1605,18 @@ body {
     }
 
     .radio-btn {
-        padding: 12px 8px;
+        min-height: 44px;
+        padding: 10px 8px;
+    }
+
+    .icon-btn,
+    .btn {
+        min-height: 44px;
     }
 
     .drawer-content {
         max-width: none;
-        width: 92vw;
+        width: min(94vw, 420px);
     }
 
     .drawer-header,
@@ -1564,13 +1638,6 @@ body {
         height: 24px;
     }
 
-    .btn,
-    .tab-link,
-    .radio-btn,
-    .icon-btn {
-        min-height: 44px;
-    }
-
     .tooltip::before {
         display: none;
     }
@@ -1578,14 +1645,10 @@ body {
 
 @media (max-width: 380px) {
     :root {
-        --mobile-board-size: min(calc(100vw - 20px), calc(100dvh - 230px), 430px);
+        --mobile-board-size: min(calc(100vw - 18px), 390px);
     }
 
-    .board-actions {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .board-actions #new-game-btn {
-        grid-column: span 2;
+    .board-actions .btn {
+        font-size: 11px;
     }
 }
