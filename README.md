@@ -5,24 +5,19 @@ Static chess trainer app built by Antigravity/Gemini.
 ## Local preview
 
 ```bash
-python3 -m http.server 3000
+python3 -m http.server 3000 --directory public
 ```
 
 Then open `http://localhost:3000`.
 
-## Cloudflare Pages
+## Cloudflare Workers/Pages static deploy
 
-This is a static site. Deploy the repository root as the Pages output directory.
+The deployable static files live in `public/` so Wrangler does not upload `node_modules`.
 
-Recommended Pages settings:
+Cloudflare build/deploy settings:
 
-- Framework preset: `None`
-- Build command: leave blank
-- Build output directory: `/`
+- Build command: `npx wrangler deploy`
+- Build output directory: leave blank if using the deploy command above
 - Root directory: `/`
 
-CLI deploy after logging in to Cloudflare:
-
-```bash
-npx wrangler pages deploy . --project-name web-chess
-```
+The committed `wrangler.jsonc` points Cloudflare at `./public`.
