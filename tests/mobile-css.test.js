@@ -39,3 +39,10 @@ test('touch targets and dashboard controls are thumb-friendly on phones', () => 
   assert.match(css, /\.dashboard-tabs\s*{[^}]*overflow-x:\s*auto/s);
   assert.match(css, /\.tooltip::before\s*{[^}]*display:\s*none/s);
 });
+
+test('bot level is reachable next to the board on phones', () => {
+  assert.match(html, /id="quick-stockfish-level"/);
+  assert.match(html, /aria-label="Quick bot level control"/);
+  assert.match(css, /\.quick-level-card\s*{[^}]*max-width:\s*var\(--mobile-board-size\)/s);
+  assert.match(css, /\.quick-level-card \.form-control\s*{[^}]*min-height:\s*44px/s);
+});

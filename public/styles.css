@@ -1534,6 +1534,30 @@ body {
         grid-column: 1 / -1;
     }
 
+    .quick-level-card {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        max-width: var(--mobile-board-size);
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        background-color: rgba(255, 255, 255, 0.035);
+    }
+
+    .quick-level-card label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        white-space: nowrap;
+    }
+
+    .quick-level-card .form-control {
+        min-height: 44px;
+    }
+
     .dashboard-area {
         height: auto;
         min-height: 0;

@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // CPU Game controls
     const sfLevelSelect = document.getElementById('stockfish-level');
+    const quickSfLevelSelect = document.getElementById('quick-stockfish-level');
     const playColorBtns = document.querySelectorAll('.radio-btn[data-color]');
     const moveHistoryEl = document.getElementById('move-history-list');
     const clearLogBtn = document.getElementById('clear-log-btn');
@@ -1431,10 +1432,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    function syncStockfishLevel(level, shouldReset = true) {
+        sfLevelSelect.value = level;
+        if (quickSfLevelSelect) quickSfLevelSelect.value = level;
+        opponentNameEl.textContent = `Stockfish (Level ${level})`;
+        if (shouldReset) resetGameToMode('play');
+    }
+
     sfLevelSelect.addEventListener('change', () => {
-        opponentNameEl.textContent = `Stockfish (Level ${sfLevelSelect.value})`;
-        resetGameToMode('play');
+        syncStockfishLevel(sfLevelSelect.value);
     });
+
+    if (quickSfLevelSelect) {
+        quickSfLevelSelect.addEventListener('change', () => {
+            syncStockfishLevel(quickSfLevelSelect.value);
+        });
+    }
 
     // -------------------------------------------------------------
     // 15. SYSTEM STARTUP
