@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resilient Noether - Premium Chess & AI Trainer</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Chess.js rules engine (Loaded Locally) -->
+    <script src="chess.min.js"></script>
+    
+    <!-- Global Diagnostic Error Banner -->
+    <script>
+        window.addEventListener('error', function(e) {
+            const errorDiv = document.createElement('div');
+            errorDiv.style.position = 'fixed';
+            errorDiv.style.top = '0';
+            errorDiv.style.left = '0';
+            errorDiv.style.width = '100%';
+            errorDiv.style.backgroundColor = '#ef4444';
+            errorDiv.style.color = '#ffffff';
+            errorDiv.style.padding = '14px 24px';
+            errorDiv.style.fontSize = '14px';
+            errorDiv.style.fontWeight = 'bold';
+            errorDiv.style.fontFamily = 'monospace';
+            errorDiv.style.zIndex = '999999';
+            errorDiv.style.boxShadow = '0 4px 20px rgba(0,0,0,0.5)';
+            errorDiv.style.boxSizing = 'border-box';
+            
+            errorDiv.innerHTML = '⚠️ RESILIENT NOETHER ERROR: ' + e.message + ' at ' + (e.filename || 'unknown file') + ':' + (e.lineno || '0');
+            
+            const closeBtn = document.createElement('span');
+            closeBtn.innerHTML = ' &times;';
+            closeBtn.style.cursor = 'pointer';
+            closeBtn.style.float = 'right';
+            closeBtn.style.fontSize = '20px';
+            closeBtn.style.lineHeight = '14px';
+            closeBtn.onclick = function() { errorDiv.remove(); };
+            errorDiv.appendChild(closeBtn);
+            
+            document.body.appendChild(errorDiv);
+        });
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navbar -->
+        <header class="app-header glass">
+            <div class="logo-area">
+                <svg class="logo-icon" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 20v2H6v-2M12 12V4M12 4L9 7m3-3l3 3M19 12a7 7 0 0 1-14 0" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div class="logo-text">
+                    <h1>Resilient Noether</h1>
+                    <span>CHESS AI & TRAINER</span>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <button id="theme-toggle-btn" class="icon-btn tooltip" data-tooltip="Toggle Layout Theme">
+                    <!-- Moon Icon -->
+                    <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <!-- Sun Icon (Hidden by default) -->
+                    <svg class="sun-icon hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <button id="settings-btn" class="icon-btn tooltip" data-tooltip="Game & Board Settings">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="app-main">
+            <!-- Left Panel: Chessboard & Live Controls -->
+            <section class="chess-board-area glass">
+                <div class="board-layout">
+                    <!-- Real-Time Evaluation Bar -->
+                    <div class="eval-bar-container">
+                        <div id="eval-bar-fill" class="eval-bar-fill" style="height: 50%;"></div>
+                        <span id="eval-bar-text" class="eval-bar-text">0.0</span>
+                    </div>
+                    
+                    <!-- Chess Board Frame (includes coordinates + grid) -->
+                    <div class="board-wrapper">
+                        <!-- Top Coordinates (for black view or files, dynamically updated if needed) -->
+                        <div class="coordinates-row top-coords">
+                            <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span>
+                        </div>
+                        
+                        <div class="board-middle-row">
+                            <!-- Left Coordinates (Ranks 8-1) -->
+                            <div class="coordinates-col left-coords">
+                                <span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                            </div>
+                            
+                            <!-- The Chessboard Grid -->
+                            <div id="chessboard" class="chessboard emerald-theme">
+                                <!-- 64 squares generated via JS -->
+                            </div>
+                            
+                            <!-- Right Coordinates (Ranks 8-1) -->
+                            <div class="coordinates-col right-coords">
+                                <span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Bottom Coordinates (Files a-h) -->
+                        <div class="coordinates-row bottom-coords">
+                            <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Bar directly below board -->
+                <div class="board-status-bar">
+                    <div class="player-badge player-black">
+                        <span class="avatar">🤖</span>
+                        <span class="player-name" id="opponent-name-display">Stockfish (Level 3)</span>
+                        <span class="turn-dot" id="opponent-turn-indicator"></span>
+                    </div>
+                    
+                    <div class="game-alerts" id="game-alerts">
+                        Ready to play. Make a move!
+                    </div>
+                    
+                    <div class="player-badge player-white">
+                        <span class="avatar">👤</span>
+                        <span class="player-name" id="user-name-display">You</span>
+                        <span class="turn-dot active" id="user-turn-indicator"></span>
+                    </div>
+                </div>
+
+                <!-- Action Controls under board -->
+                <div class="board-actions">
+                    <button id="flip-board-btn" class="btn btn-secondary tooltip" data-tooltip="Flip Board view">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                        Flip
+                    </button>
+                    <button id="takeback-btn" class="btn btn-secondary tooltip" data-tooltip="Take back last move">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 7v6h6M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"></path>
+                        </svg>
+                        Undo
+                    </button>
+                    <button id="hint-btn" class="btn btn-secondary tooltip" data-tooltip="Ask Stockfish for the best move">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                            <circle cx="12" cy="12" r="4"></circle>
+                        </svg>
+                        Hint
+                    </button>
+                    <button id="resign-btn" class="btn btn-danger tooltip" data-tooltip="Resign current game">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                            <line x1="4" y1="22" x2="4" y2="15"></line>
+                        </svg>
+                        Resign
+                    </button>
+                    <button id="new-game-btn" class="btn btn-primary tooltip" data-tooltip="Start a fresh match">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 5v14M5 12h14"></path>
+                        </svg>
+                        New Game
+                    </button>
+                </div>
+            </section>
+
+            <!-- Right Panel: Tabs dashboard -->
+            <section class="dashboard-area glass">
+                <!-- Navigation Tabs -->
+                <nav class="dashboard-tabs">
+                    <button id="tab-cpu" class="tab-link active" data-tab="pane-cpu">Play vs CPU</button>
+                    <button id="tab-openings" class="tab-link" data-tab="pane-openings">Openings</button>
+                    <button id="tab-puzzles" class="tab-link" data-tab="pane-puzzles">Puzzles</button>
+                    <button id="tab-analysis" class="tab-link" data-tab="pane-analysis">Analysis</button>
+                </nav>
+
+                <div class="tab-content">
+                    <!-- TAB 1: PLAY VS CPU -->
+                    <div id="pane-cpu" class="tab-pane active">
+                        <div class="panel-section">
+                            <h3>Opponent Settings</h3>
+                            <div class="settings-grid">
+                                <div class="form-group">
+                                    <label for="stockfish-level">Stockfish Level</label>
+                                    <select id="stockfish-level" class="form-control">
+                                        <option value="1">Level 1 (800 Elo) - Beginner</option>
+                                        <option value="2">Level 2 (1100 Elo) - Casual</option>
+                                        <option value="3" selected>Level 3 (1400 Elo) - Intermediate</option>
+                                        <option value="4">Level 4 (1700 Elo) - Advanced</option>
+                                        <option value="5">Level 5 (2000 Elo) - Expert</option>
+                                        <option value="6">Level 6 (2200 Elo) - Master</option>
+                                        <option value="7">Level 7 (2400 Elo) - Grandmaster</option>
+                                        <option value="8">Level 8 (2700+ Elo) - Super GM</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Play As</label>
+                                    <div class="radio-group">
+                                        <button type="button" class="radio-btn active" data-color="white">White</button>
+                                        <button type="button" class="radio-btn" data-color="black">Black</button>
+                                        <button type="button" class="radio-btn" data-color="random">Random</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel-section flex-grow">
+                            <div class="section-header">
+                                <h3>Move Log</h3>
+                                <button id="clear-log-btn" class="text-btn">Reset Board</button>
+                            </div>
+                            <div class="move-history-container" id="move-history-list">
+                                <!-- Generated list of moves (1. e4 e5 ...) -->
+                                <div class="empty-state">No moves played yet. Start the game!</div>
+                            </div>
+                        </div>
+
+                        <div class="panel-section user-feedback-section hidden" id="move-feedback-panel">
+                            <h3>Move Analysis</h3>
+                            <div class="feedback-card">
+                                <div class="feedback-badge" id="feedback-badge-type">Excellent</div>
+                                <div class="feedback-desc" id="feedback-badge-desc">Your move e4 was the 2nd best move in this position.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: OPENING TRAINER -->
+                    <div id="pane-openings" class="tab-pane">
+                        <div class="panel-section">
+                            <h3>Learn Chess Openings</h3>
+                            <p class="section-intro">Select an opening to learn. The trainer will guide your moves step-by-step.</p>
+                            <div class="form-group">
+                                <label for="opening-selector">Select Opening</label>
+                                <select id="opening-selector" class="form-control">
+                                    <option value="" disabled selected>-- Choose an opening --</option>
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="panel-section flex-grow hidden" id="opening-guide-panel">
+                            <div class="opening-detail-header">
+                                <h4 id="opening-title">Ruy Lopez</h4>
+                                <span class="badge" id="opening-eco">C60</span>
+                            </div>
+                            <p class="opening-description" id="opening-desc">A classic, highly popular opening focusing on central control and king-side development.</p>
+                            
+                            <div class="opening-checklist">
+                                <h5>Required Moves</h5>
+                                <ul class="checklist-items" id="opening-moves-list">
+                                    <!-- Populated dynamically with checkboxes -->
+                                </ul>
+                            </div>
+                            
+                            <div class="opening-instructions glass" id="opening-instruction-box">
+                                Play <strong>1. e4</strong> to start the opening.
+                            </div>
+                            
+                            <button id="reset-opening-btn" class="btn btn-secondary w-full">Restart Opening Quiz</button>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: TACTICS PUZZLES -->
+                    <div id="pane-puzzles" class="tab-pane">
+                        <div class="panel-section">
+                            <div class="puzzle-header-stats">
+                                <h3>Tactics Puzzles</h3>
+                                <div class="streak-counter">
+                                    Streak: <span id="puzzle-streak">0</span> 🔥
+                                </div>
+                            </div>
+                            <p class="section-intro">Train your tactical vision by solving interactive puzzles.</p>
+                            
+                            <div class="puzzle-selector-grid" id="puzzle-list-container">
+                                <!-- Populated dynamically with puzzle cards -->
+                            </div>
+                        </div>
+
+                        <div class="panel-section flex-grow hidden" id="puzzle-active-panel">
+                            <div class="puzzle-meta">
+                                <span class="puzzle-theme-badge" id="puzzle-theme">Pin / Checkmate</span>
+                                <span class="puzzle-difficulty-badge" id="puzzle-difficulty">Medium</span>
+                            </div>
+                            <div class="puzzle-prompt glass" id="puzzle-prompt-text">
+                                White to move and mate in 2.
+                            </div>
+                            
+                            <div class="puzzle-status-message" id="puzzle-status-message">
+                                Make your move...
+                            </div>
+                            
+                            <div class="puzzle-controls-row">
+                                <button id="restart-puzzle-btn" class="btn btn-secondary flex-grow">Retry Puzzle</button>
+                                <button id="show-puzzle-solution-btn" class="btn btn-secondary">Show Solution</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: ANALYSIS DASHBOARD -->
+                    <div id="pane-analysis" class="tab-pane">
+                        <div class="panel-section">
+                            <h3>Real-Time Engine Analysis</h3>
+                            <div class="analysis-stats">
+                                <div class="stat-card">
+                                    <span class="stat-label">Engine status</span>
+                                    <span class="stat-value text-success" id="engine-status-text">Idle</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-label">Search depth</span>
+                                    <span class="stat-value" id="engine-depth-text">0 / 15</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel-section flex-grow">
+                            <h3>Suggested Continuations</h3>
+                            <div class="suggested-lines-container" id="suggested-lines">
+                                <div class="empty-state">Make a move to calculate engine suggestions.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- SETTINGS DRAWER / MODAL -->
+    <div id="settings-drawer" class="drawer">
+        <div class="drawer-overlay" id="settings-overlay"></div>
+        <div class="drawer-content glass">
+            <div class="drawer-header">
+                <h2>Settings</h2>
+                <button id="close-settings-btn" class="icon-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="drawer-body">
+                <!-- Theme Settings -->
+                <div class="setting-group">
+                    <h3>Board Color Theme</h3>
+                    <div class="theme-selector-grid">
+                        <button class="theme-option active" data-board-theme="emerald">
+                            <span class="color-preview emerald-preview"></span>
+                            Emerald Club
+                        </button>
+                        <button class="theme-option" data-board-theme="midnight">
+                            <span class="color-preview midnight-preview"></span>
+                            Midnight Slate
+                        </button>
+                        <button class="theme-option" data-board-theme="neon">
+                            <span class="color-preview neon-preview"></span>
+                            Neon Synth
+                        </button>
+                        <button class="theme-option" data-board-theme="wood">
+                            <span class="color-preview wood-preview"></span>
+                            Warm Walnut
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sound Settings -->
+                <div class="setting-group">
+                    <h3>Audio Feedback</h3>
+                    <div class="toggle-control">
+                        <label for="sound-toggle">Play Move Sound Effects</label>
+                        <input type="checkbox" id="sound-toggle" checked>
+                    </div>
+                </div>
+
+                <!-- Stockfish Thinking Limit -->
+                <div class="setting-group">
+                    <h3>Engine Search Limits</h3>
+                    <div class="range-control">
+                        <div class="range-labels">
+                            <label for="sf-max-depth">Maximum Search Depth</label>
+                            <span id="sf-depth-val">15</span>
+                        </div>
+                        <input type="range" id="sf-max-depth" min="5" max="20" value="15" class="slider">
+                    </div>
+                    <div class="range-control" style="margin-top: 15px;">
+                        <div class="range-labels">
+                            <label for="sf-max-time">Maximum Thinking Time</label>
+                            <span id="sf-time-val">2.0s</span>
+                        </div>
+                        <input type="range" id="sf-max-time" min="500" max="5000" step="500" value="2000" class="slider">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="stockfish-client.js"></script>
+    <script src="trainer.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
