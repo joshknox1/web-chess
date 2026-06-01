@@ -29,6 +29,13 @@
     --shadow-premium: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
     --blur-intensity: 12px;
 
+    /* Layout sizing */
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --mobile-board-size: min(calc(100vw - 28px), calc(100dvh - 250px), 520px);
+
     /* Default Board Theme (Emerald) */
     --square-light: #eeeed2;
     --square-dark: #769656;
@@ -99,8 +106,11 @@ body {
     background-color: var(--bg-app);
     color: var(--text-primary);
     min-height: 100vh;
+    min-height: 100dvh;
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
+    -webkit-text-size-adjust: 100%;
+    overscroll-behavior: none;
 }
 
 /* Glassmorphism Styling Utilities */
@@ -121,7 +131,8 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    padding: 16px;
+    height: 100dvh;
+    padding: calc(16px + var(--safe-top)) calc(16px + var(--safe-right)) calc(16px + var(--safe-bottom)) calc(16px + var(--safe-left));
     gap: 16px;
     max-width: 1600px;
     margin: 0 auto;
@@ -178,13 +189,14 @@ body {
 @media (max-width: 950px) {
     .app-main {
         grid-template-columns: 1fr;
-        overflow-y: auto;
-        padding-bottom: 50px;
+        overflow-y: visible;
+        padding-bottom: 28px;
     }
     
     .app-container {
         height: auto;
         min-height: 100vh;
+        min-height: 100dvh;
     }
 }
 
@@ -312,6 +324,8 @@ body {
 .square {
     width: 100%;
     height: 100%;
+    min-width: 0;
+    min-height: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1298,4 +1312,280 @@ body {
 @keyframes slide-up {
     from { transform: translateY(10px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
+}
+
+/* Phone-first polish: keep the board playable and controls thumb-friendly. */
+@media (max-width: 700px) {
+    :root {
+        --border-radius-lg: 14px;
+        --mobile-board-size: min(calc(100vw - 28px), calc(100dvh - 250px), 520px);
+    }
+
+    body {
+        overflow-y: auto;
+    }
+
+    .app-container {
+        padding: calc(8px + var(--safe-top)) calc(8px + var(--safe-right)) calc(12px + var(--safe-bottom)) calc(8px + var(--safe-left));
+        gap: 10px;
+        max-width: none;
+    }
+
+    .app-header {
+        padding: 8px 10px;
+        border-radius: 12px;
+    }
+
+    .logo-area {
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .logo-icon {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .logo-text {
+        min-width: 0;
+    }
+
+    .logo-text h1 {
+        font-size: 15px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 58vw;
+    }
+
+    .logo-text span {
+        display: none;
+    }
+
+    .header-actions {
+        gap: 8px;
+    }
+
+    .app-main {
+        gap: 10px;
+    }
+
+    .chess-board-area {
+        position: sticky;
+        top: calc(4px + var(--safe-top));
+        z-index: 20;
+        padding: 10px 6px;
+        gap: 10px;
+        justify-content: flex-start;
+    }
+
+    .board-layout {
+        width: var(--mobile-board-size);
+        height: var(--mobile-board-size);
+        max-width: var(--mobile-board-size);
+        min-height: 290px;
+        aspect-ratio: 1 / 1;
+        gap: 6px;
+    }
+
+    .eval-bar-container {
+        width: 10px;
+    }
+
+    .coordinates-row {
+        height: 14px;
+        font-size: 9px;
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .coordinates-col {
+        width: 14px;
+        font-size: 9px;
+    }
+
+    .chessboard {
+        border-radius: 3px;
+    }
+
+    .piece {
+        width: 94%;
+        height: 94%;
+    }
+
+    .square.legal-move::after {
+        width: 32%;
+        height: 32%;
+    }
+
+    .square.legal-move.has-piece::after {
+        width: 86%;
+        height: 86%;
+        border-width: 3px;
+    }
+
+    .board-status-bar {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: 8px;
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .player-badge {
+        justify-content: center;
+        padding: 2px 6px;
+    }
+
+    .player-badge .player-name {
+        font-size: 12px;
+    }
+
+    .game-alerts {
+        order: -1;
+        max-width: none;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        line-height: 1.25;
+        font-size: 12px;
+    }
+
+    .board-actions {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        max-width: 100%;
+    }
+
+    .board-actions .btn {
+        padding: 9px 8px;
+        font-size: 12px;
+        gap: 5px;
+    }
+
+    .board-actions #new-game-btn {
+        grid-column: span 2;
+    }
+
+    .dashboard-area {
+        height: auto;
+        min-height: 360px;
+        overflow: visible;
+    }
+
+    .dashboard-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .dashboard-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tab-link {
+        flex: 0 0 auto;
+        padding: 12px 14px;
+        min-width: 118px;
+        white-space: nowrap;
+    }
+
+    .tab-content {
+        overflow: visible;
+        min-height: 360px;
+    }
+
+    .tab-pane {
+        position: static;
+        height: auto;
+        min-height: 360px;
+        padding: 14px;
+        overflow: visible;
+    }
+
+    .settings-grid,
+    .analysis-stats,
+    .puzzle-controls-row,
+    .feedback-card {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .move-history-container {
+        grid-template-columns: 1fr;
+        max-height: 210px;
+        min-height: 120px;
+    }
+
+    .empty-state {
+        grid-column: span 1;
+        padding: 24px 0;
+    }
+
+    .form-control {
+        width: 100%;
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .radio-group {
+        gap: 4px;
+    }
+
+    .radio-btn {
+        padding: 12px 8px;
+    }
+
+    .drawer-content {
+        max-width: none;
+        width: 92vw;
+    }
+
+    .drawer-header,
+    .drawer-body {
+        padding: 16px;
+    }
+
+    .theme-selector-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .slider::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+    }
+
+    .toggle-control input[type="checkbox"] {
+        width: 24px;
+        height: 24px;
+    }
+
+    .btn,
+    .tab-link,
+    .radio-btn,
+    .icon-btn {
+        min-height: 44px;
+    }
+
+    .tooltip::before {
+        display: none;
+    }
+}
+
+@media (max-width: 380px) {
+    :root {
+        --mobile-board-size: min(calc(100vw - 20px), calc(100dvh - 230px), 430px);
+    }
+
+    .board-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .board-actions #new-game-btn {
+        grid-column: span 2;
+    }
 }
