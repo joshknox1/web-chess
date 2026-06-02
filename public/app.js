@@ -77,30 +77,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const feedbackDescEl = document.getElementById('feedback-badge-desc');
     
     // Opening Trainer controls
-    const openingSelector = document.getElementById('opening-selector');
-    const openingGuidePanel = document.getElementById('opening-guide-panel');
-    const openingTitleEl = document.getElementById('opening-title');
-    const openingEcoEl = document.getElementById('opening-eco');
-    const openingDescEl = document.getElementById('opening-desc');
-    const openingMovesList = document.getElementById('opening-moves-list');
-    const openingInstructionBox = document.getElementById('opening-instruction-box');
-    const resetOpeningBtn = document.getElementById('reset-opening-btn');
+    const getEl = (id, tag = 'div') => document.getElementById(id) || document.createElement(tag);
+
+    // Opening Trainer controls
+    const openingSelector = getEl('opening-selector', 'select');
+    const openingGuidePanel = getEl('opening-guide-panel');
+    const openingTitleEl = getEl('opening-title');
+    const openingEcoEl = getEl('opening-eco');
+    const openingDescEl = getEl('opening-desc');
+    const openingMovesList = getEl('opening-moves-list', 'ul');
+    const openingInstructionBox = getEl('opening-instruction-box');
+    const resetOpeningBtn = getEl('reset-opening-btn', 'button');
     
     // Puzzles controls
-    const puzzleStreakEl = document.getElementById('puzzle-streak');
-    const puzzleListContainer = document.getElementById('puzzle-list-container');
-    const puzzleActivePanel = document.getElementById('puzzle-active-panel');
-    const puzzleThemeEl = document.getElementById('puzzle-theme');
-    const puzzleDifficultyEl = document.getElementById('puzzle-difficulty');
-    const puzzlePromptText = document.getElementById('puzzle-prompt-text');
-    const puzzleStatusMessage = document.getElementById('puzzle-status-message');
-    const restartPuzzleBtn = document.getElementById('restart-puzzle-btn');
-    const showPuzzleSolutionBtn = document.getElementById('show-puzzle-solution-btn');
+    const puzzleStreakEl = getEl('puzzle-streak');
+    const puzzleListContainer = getEl('puzzle-list-container');
+    const puzzleActivePanel = getEl('puzzle-active-panel');
+    const puzzleThemeEl = getEl('puzzle-theme');
+    const puzzleDifficultyEl = getEl('puzzle-difficulty');
+    const puzzlePromptText = getEl('puzzle-prompt-text');
+    const puzzleStatusMessage = getEl('puzzle-status-message');
+    const restartPuzzleBtn = getEl('restart-puzzle-btn', 'button');
+    const showPuzzleSolutionBtn = getEl('show-puzzle-solution-btn', 'button');
     
     // Analysis controls
-    const engineStatusText = document.getElementById('engine-status-text');
-    const engineDepthText = document.getElementById('engine-depth-text');
-    const suggestedLinesEl = document.getElementById('suggested-lines');
+    const engineStatusText = getEl('engine-status-text');
+    const engineDepthText = getEl('engine-depth-text');
+    const suggestedLinesEl = getEl('suggested-lines');
     
     // Settings Drawer elements
     const settingsBtn = document.getElementById('settings-btn');

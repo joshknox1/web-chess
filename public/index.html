@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Chess Trainer</title>
+    <title>Chess</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,7 +58,7 @@
                     <path d="M18 20v2H6v-2M12 12V4M12 4L9 7m3-3l3 3M19 12a7 7 0 0 1-14 0" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 <div class="logo-text">
-                    <h1>Chess Trainer</h1>
+                    <h1>Chess</h1>
                     <span>TRAIN & PLAY</span>
                 </div>
             </div>
@@ -210,9 +210,6 @@
                 <!-- Navigation Tabs -->
                 <nav class="dashboard-tabs">
                     <button id="tab-cpu" class="tab-link active" data-tab="pane-cpu">Play vs CPU</button>
-                    <button id="tab-openings" class="tab-link" data-tab="pane-openings">Openings</button>
-                    <button id="tab-puzzles" class="tab-link" data-tab="pane-puzzles">Puzzles</button>
-                    <button id="tab-analysis" class="tab-link" data-tab="pane-analysis">Analysis</button>
                 </nav>
 
                 <div class="tab-content">
@@ -265,101 +262,6 @@
                         </div>
                     </div>
 
-                    <!-- TAB 2: OPENING TRAINER -->
-                    <div id="pane-openings" class="tab-pane">
-                        <div class="panel-section">
-                            <h3>Learn Chess Openings</h3>
-                            <p class="section-intro">Select an opening to learn. The trainer will guide your moves step-by-step.</p>
-                            <div class="form-group">
-                                <label for="opening-selector">Select Opening</label>
-                                <select id="opening-selector" class="form-control">
-                                    <option value="" disabled selected>-- Choose an opening --</option>
-                                    <!-- Populated dynamically -->
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="panel-section flex-grow hidden" id="opening-guide-panel">
-                            <div class="opening-detail-header">
-                                <h4 id="opening-title">Ruy Lopez</h4>
-                                <span class="badge" id="opening-eco">C60</span>
-                            </div>
-                            <p class="opening-description" id="opening-desc">A classic, highly popular opening focusing on central control and king-side development.</p>
-                            
-                            <div class="opening-checklist">
-                                <h5>Required Moves</h5>
-                                <ul class="checklist-items" id="opening-moves-list">
-                                    <!-- Populated dynamically with checkboxes -->
-                                </ul>
-                            </div>
-                            
-                            <div class="opening-instructions glass" id="opening-instruction-box">
-                                Play <strong>1. e4</strong> to start the opening.
-                            </div>
-                            
-                            <button id="reset-opening-btn" class="btn btn-secondary w-full">Restart Opening Quiz</button>
-                        </div>
-                    </div>
-
-                    <!-- TAB 3: TACTICS PUZZLES -->
-                    <div id="pane-puzzles" class="tab-pane">
-                        <div class="panel-section">
-                            <div class="puzzle-header-stats">
-                                <h3>Tactics Puzzles</h3>
-                                <div class="streak-counter">
-                                    Streak: <span id="puzzle-streak">0</span> 🔥
-                                </div>
-                            </div>
-                            <p class="section-intro">Train your tactical vision by solving interactive puzzles.</p>
-                            
-                            <div class="puzzle-selector-grid" id="puzzle-list-container">
-                                <!-- Populated dynamically with puzzle cards -->
-                            </div>
-                        </div>
-
-                        <div class="panel-section flex-grow hidden" id="puzzle-active-panel">
-                            <div class="puzzle-meta">
-                                <span class="puzzle-theme-badge" id="puzzle-theme">Pin / Checkmate</span>
-                                <span class="puzzle-difficulty-badge" id="puzzle-difficulty">Medium</span>
-                            </div>
-                            <div class="puzzle-prompt glass" id="puzzle-prompt-text">
-                                White to move and mate in 2.
-                            </div>
-                            
-                            <div class="puzzle-status-message" id="puzzle-status-message">
-                                Make your move...
-                            </div>
-                            
-                            <div class="puzzle-controls-row">
-                                <button id="restart-puzzle-btn" class="btn btn-secondary flex-grow">Retry Puzzle</button>
-                                <button id="show-puzzle-solution-btn" class="btn btn-secondary">Show Solution</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- TAB 4: ANALYSIS DASHBOARD -->
-                    <div id="pane-analysis" class="tab-pane">
-                        <div class="panel-section">
-                            <h3>Real-Time Engine Analysis</h3>
-                            <div class="analysis-stats">
-                                <div class="stat-card">
-                                    <span class="stat-label">Engine status</span>
-                                    <span class="stat-value text-success" id="engine-status-text">Idle</span>
-                                </div>
-                                <div class="stat-card">
-                                    <span class="stat-label">Search depth</span>
-                                    <span class="stat-value" id="engine-depth-text">0 / 15</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="panel-section flex-grow">
-                            <h3>Suggested Continuations</h3>
-                            <div class="suggested-lines-container" id="suggested-lines">
-                                <div class="empty-state">Make a move to calculate engine suggestions.</div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
         </main>
